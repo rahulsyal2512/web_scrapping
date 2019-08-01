@@ -1,7 +1,13 @@
 const request = require("request");
 const cheerio = require("cheerio");
+const fs = require("fs");
 
-const URL = "https://hackernoon.com/tagged/bitcoin";
+const writeStream = fs.createWriteStream("posts.csv");
+
+//Headers
+writeStream.write(`Title \n`);
+
+const URL = "https://hackernoon.com/tagged/bitcoin"; //Just an example
 
 request(URL, (err, res, body) => {
   if (!err && res.statusCode == 200) {
@@ -11,7 +17,8 @@ request(URL, (err, res, body) => {
         .find(".title")
         .children("a")
         .text();
-      console.log(title);
+      writeStream.write(`${title} \n`);
     });
+    console.log("Scrapping done");
   }
 });
